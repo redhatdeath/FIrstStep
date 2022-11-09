@@ -8,7 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 // first step - refactor->rename class: MainActivity->ActivityMain
-//second step - add second activity: ActivitySecond:file->new->Activity->Empty Activity
+// second step - add second activity: ActivitySecond:file->new->Activity->Empty Activity
 public class ActivityMain extends AppCompatActivity {
     private Button bt;
 
@@ -31,9 +31,8 @@ public class ActivityMain extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(
-                                ActivityMain.this,
-                                ActivitySecond.class);
+                        Intent intent =
+                                ActivitySecond.launchSecondActivity(ActivityMain.this);
                         startActivity(intent);
                     }
                 }
