@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FIrstStep</string>
+    <string name="launch_second_activity">Launch second Activity</string>
 </resources>
