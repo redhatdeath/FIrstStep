@@ -3,12 +3,12 @@ package ru.shanin.firststep;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class ActivitySecond extends AppCompatActivity {
     // add some const value to set name work processes
@@ -18,7 +18,7 @@ public class ActivitySecond extends AppCompatActivity {
     private static String MOD_NAME;
     private static final String EXTRA_DATA;
     private static String INPUT_DATA;
-    private static Data data;
+    private static Data local_data;
 
     private TextView tv;
 
@@ -36,10 +36,9 @@ public class ActivitySecond extends AppCompatActivity {
     }
 
     // with args. use in 99.99%
-    public static Intent launchSecondActivityWithArgsNew(Context context, String args) {
+    public static Intent launchSecondActivityWithArgsNew(Context context) {
         Intent intent = new Intent(context, ActivitySecond.class);
         intent.putExtra(EXTRA_MOD, EXTRA_MOD_NEW);
-        intent.putExtra(EXTRA_DATA, args);
         return intent;
     }
 
@@ -56,9 +55,18 @@ public class ActivitySecond extends AppCompatActivity {
         MOD_NAME = getIntent().getStringExtra(EXTRA_MOD);
         if (!MOD_NAME.equals(EXTRA_MOD_EDIT) && !MOD_NAME.equals(EXTRA_MOD_NEW))
             throw new RuntimeException("Unknown extra mod " + MOD_NAME);
-        if (!getIntent().hasExtra(EXTRA_DATA))
-            throw new RuntimeException("Input args is absent");
-        INPUT_DATA = getIntent().getStringExtra(EXTRA_DATA);
+        if (MOD_NAME.equals(EXTRA_MOD_NEW)) {
+            local_data = new Data(
+                    NewData.genFirstName(), NewData.genSecondName(), NewData.genPhoneNumber());
+            Log.d("DATA", "sa_new: data = " + local_data);
+        }
+        if (MOD_NAME.equals(EXTRA_MOD_EDIT)) {
+            if (!getIntent().hasExtra(EXTRA_DATA))
+                throw new RuntimeException("Input args is absent");
+            INPUT_DATA = getIntent().getStringExtra(EXTRA_DATA);
+            local_data = (new Gson()).fromJson(INPUT_DATA, Data.class);
+            Log.d("DATA", "sa_edit: data = " + local_data);
+        }
     }
 
 
@@ -81,15 +89,10 @@ public class ActivitySecond extends AppCompatActivity {
         tv = findViewById(R.id.tv);
     }
 
-    private void parseInputData() {
-        data = (new Gson())
-                .fromJson(INPUT_DATA, Data.class);
-    }
-
     private void setupView() {
         //TODO setup Views
-        parseInputData();
+
         //TODO work with INPUT_DATA
-        tv.setText(data.toString());
+        tv.setText(local_data.toString());
     }
 }

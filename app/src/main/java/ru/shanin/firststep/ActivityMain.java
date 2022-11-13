@@ -2,6 +2,7 @@ package ru.shanin.firststep;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -30,27 +31,23 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     private void setupView() {
+        data = new Data(
+                NewData.genFirstName(), NewData.genSecondName(), NewData.genPhoneNumber());
         bt_new.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                data = new Data(
-                        NewData.genFirstName(),
-                        NewData.genSecondName(),
-                        NewData.genPhoneNumber());
-                Intent intent = ActivitySecond.launchSecondActivityWithArgsNew(
-                        ActivityMain.this,
-                        data.toString());
+                Intent intent = ActivitySecond.
+                        launchSecondActivityWithArgsNew(ActivityMain.this);
+                Log.d("DATA", "bt_new: data = null");
                 startActivity(intent);
-                bt_edit.setVisibility(View.VISIBLE);
             }
         });
-        bt_edit.setVisibility(View.INVISIBLE);
         bt_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = ActivitySecond.launchSecondActivityWithArgsNew(
-                        ActivityMain.this,
-                        data.toString());
+                Intent intent = ActivitySecond.
+                        launchSecondActivityWithArgsEdit(ActivityMain.this, data.toString());
+                Log.d("DATA", "bt_edit: data = " + data);
                 startActivity(intent);
             }
         });
